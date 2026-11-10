@@ -1,0 +1,128 @@
+<!--
+  HomeEase – Worker Availability & Service Manager
+  AngularJS 1.x template. Bootstrapped by availability.js into its own DOM node;
+  React never renders or touches anything inside this template.
+-->
+<div class="ng-availability" ng-controller="AvailabilityController as vm" ng-cloak>
+  <div class="nga-notfound" ng-if="!vm.worker">
+    <h3>Helper profile not found</h3>
+    <p>Log in with a helper account to manage availability.</p>
+  </div>
+
+  <div ng-if="vm.worker">
+    <header class="nga-header">
+      <div>
+        <span class="nga-badge"><i class="nga-ng-logo">A</i> AngularJS {{ vm.angularVersion }} module</span>
+        <h2>Availability &amp; services</h2>
+        <p>Choose the days, hours and services you offer. Customers see your changes as soon as you save.</p>
+      </div>
+      <div class="nga-header-actions">
+        <button type="button" class="nga-btn nga-btn-ghost" ng-click="vm.discard()" ng-disabled="!vm.isDirty()">Discard changes</button>
+        <button type="button" class="nga-btn nga-btn-primary" ng-click="vm.save()" ng-disabled="!vm.isDirty() || vm.errors().length">
+          Save changes
+        </button>
+      </div>
+    </header>
+
+    <div class="nga-status" ng-class="{ 'is-dirty': vm.isDirty(), 'is-saved': vm.savedAt && !vm.isDirty() }">
+      <span ng-if="vm.isDirty()">● Unsaved changes</span>
+      <span ng-if="!vm.isDirty() && vm.savedAt">✓ Saved at {{ vm.savedAt | date:'h:mm a' }}. The customer app has been updated.</span>
+      <span ng-if="!vm.isDirty() && !vm.savedAt">All changes saved</span>
+    </div>
+
+    <ul class="nga-errors" ng-if="vm.errors().length">
+      <li ng-repeat="err in vm.errors()">{{ err }}</li>
+    </ul>
+
+    <div class="nga-grid">
+      <!-- Weekly schedule -->
+      <section class="nga-card nga-schedule">
+        <div class="nga-card-head">
+          <h3>Weekly schedule</h3>
+          <div class="nga-presets">
+            <button type="button" class="nga-chip-btn" ng-click="vm.preset('evenings')">Weekday evenings</button>
+            <button type="button" class="nga-chip-btn" ng-click="vm.preset('mornings')">Weekday mornings</button>
+            <button type="button" class="nga-chip-btn" ng-click="vm.copyMonday()">Copy Monday to weekdays</button>
+            <button type="button" class="nga-chip-btn danger" ng-click="vm.preset('clear')">Clear all</button>
+          </div>
+        </div>
+
+        <div class="nga-day" ng-repeat="day in vm.days track by day" ng-class="{ off: !vm.model.availability[day].available }">
+          <div class="nga-day-row">
+            <label class="nga-switch">
+              <input type="checkbox" ng-model="vm.model.availability[day].available" ng-change="vm.onToggleDay(day)" />
+              <span class="nga-slider"></span>
+              <span class="nga-day-name">{{ day }}</span>
+            </label>
+
+            <div class="nga-hours" ng-if="vm.model.availability[day].available">
+              <select ng-model="vm.model.availability[day].start" ng-change="vm.onHoursChange(day)"
+                      ng-options="h as vm.formatHour(h) for h in vm.hours" aria-label="{{ day }} start time"></select>
+              <span>to</span>
+              <select ng-model="vm.model.availability[day].end" ng-change="vm.onHoursChange(day)"
+                      ng-options="h as vm.formatHour(h) for h in vm.endHours" aria-label="{{ day }} end time"></select>
+            </div>
+            <span class="nga-unavailable" ng-if="!vm.model.availability[day].available">Unavailable</span>
+            <span class="nga-day-summary" ng-if="vm.model.availability[day].available">
+              {{ vm.slotsFor(day).length - vm.model.availability[day].disabled.length }} h
+            </span>
+          </div>
+
+          <div class="nga-slots" ng-if="vm.model.availability[day].available && vm.slotsFor(day).length">
+            <button type="button" class="nga-slot" ng-repeat="h in vm.slotsFor(day) track by h"
+                    ng-class="{ disabled: vm.isDisabled(day, h) }"
+                    ng-click="vm.toggleSlot(day, h)"
+                    title="{{ vm.isDisabled(day, h) ? 'Click to enable' : 'Click to disable' }} this slot">
+              {{ vm.formatHour(h) }}
+            </button>
+          </div>
+        </div>
+        <p class="nga-hint">Tip: click an individual hour to block it (for example, a lunch break) without changing your whole day.</p>
+      </section>
+
+      <div class="nga-side">
+        <!-- Hourly charge -->
+        <section class="nga-card">
+          <h3>Hourly charge</h3>
+          <div class="nga-rate">
+            <button type="button" class="nga-round" ng-click="vm.bumpRate(-10)" aria-label="Decrease rate">−</button>
+            <div class="nga-rate-input">
+              <span>₹</span>
+              <input type="number" min="80" max="1000" step="10" ng-model="vm.model.hourlyRate" aria-label="Hourly rate in rupees" />
+              <small>/hour</small>
+            </div>
+            <button type="button" class="nga-round" ng-click="vm.bumpRate(10)" aria-label="Increase rate">+</button>
+          </div>
+          <p class="nga-hint">Most helpers in {{ vm.worker.location }} charge ₹120–₹220 per hour.</p>
+        </section>
+
+        <!-- Services -->
+        <section class="nga-card">
+          <h3>Services you offer <small>({{ vm.model.services.length }} selected)</small></h3>
+          <div class="nga-services">
+            <button type="button" class="nga-service" ng-repeat="s in vm.services track by s.id"
+                    ng-class="{ active: vm.hasService(s.id) }" ng-click="vm.toggleService(s.id)"
+                    aria-pressed="{{ vm.hasService(s.id) }}">
+              <span class="nga-check">✓</span>{{ s.name }}
+            </button>
+          </div>
+        </section>
+
+        <!-- Live preview -->
+        <section class="nga-card nga-preview">
+          <h3>What customers will see</h3>
+          <ul>
+            <li ng-repeat="day in vm.days track by day">
+              <b>{{ day.substring(0, 3) }}</b>
+              <span ng-class="{ muted: !vm.summary(day).available }">{{ vm.summary(day).label }}</span>
+            </li>
+          </ul>
+          <div class="nga-totals">
+            <div><small>Weekly hours</small><b>{{ vm.weeklyHours() }} h</b></div>
+            <div><small>Potential / week</small><b>₹{{ vm.weeklyHours() * (vm.model.hourlyRate || 0) | number:0 }}</b></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

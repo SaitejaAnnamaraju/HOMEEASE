@@ -1,7 +1,6 @@
-__pycache__/
-*.pyc
-.pytest_cache/
-.venv/
-venv/
-build/
-dist/
+node_modules
+dist
+.vercel
+.DS_Store
+*.log
+.impeccable
